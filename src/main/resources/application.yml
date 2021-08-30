@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: test01
+
+  elasticsearch:
+    rest:
+      uris: 192.168.17.130:9200
+      connection-timeout: 1000
+      read-timeout: 1000
+
+
+server:
+  port: 29502
+
