@@ -1,6 +1,8 @@
 package com.example.test01.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -8,6 +10,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 
 public class Server {
     private int port;
@@ -26,6 +30,9 @@ public class Server {
                     .childHandler(new ChannelInitializer<SocketChannel>() { //配置具体的数据处理方式
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            ByteBuf byteBuf = Unpooled.copiedBuffer("$_".getBytes());//tcp粘包添加的自定义分隔符
+                            socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024,byteBuf));//tcp粘包添加的自定义分隔符，以及每条数据的大小
+                            socketChannel.pipeline().addLast(new StringDecoder());
                             socketChannel.pipeline().addLast(new ServerHandler());
                         }
                     })

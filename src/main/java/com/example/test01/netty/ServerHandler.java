@@ -7,18 +7,19 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
-    //@Override
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
         //do something msg
-        ByteBuf buf = (ByteBuf)msg;
-        byte[] data = new byte[buf.readableBytes()];
-        buf.readBytes(data);
-        String request = new String(data, "utf-8");
+//        ByteBuf buf = (ByteBuf)msg;
+//        byte[] data = new byte[buf.readableBytes()];
+//        buf.readBytes(data);
+//        String request = new String(data, "utf-8");
+        String request = (String)msg;
         System.out.println("Server: " + request);
         //写给客户端
         String response = "我是反馈的信息";
-        ctx.writeAndFlush(Unpooled.copiedBuffer("888".getBytes()));
+        ctx.writeAndFlush(Unpooled.copiedBuffer(response.getBytes()));
         //.addListener(ChannelFutureListener.CLOSE);
 
 
